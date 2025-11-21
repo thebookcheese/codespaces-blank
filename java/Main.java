@@ -62,6 +62,7 @@ public class Main {
     static void Classes() {
         Person name = new Person();
         System.out.println(name.Age);
+        System.out.println(name.Name);
     }
     public static void main(String[] args) {
         System.out.println("Hello World");
