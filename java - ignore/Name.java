@@ -1,5 +1,3 @@
-package com.github.javafaker;
-
 import org.apache.commons.lang3.StringUtils;
 
 public class Name {
