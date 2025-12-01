@@ -1,4 +1,6 @@
 import random
+import re
+
 Prompt = input("Input \n")
 responses = ["As an ai language model, i cannot help with this problem", "The answer is 3" , "The English Lowlands are in the central and southern regions of the country, consisting of green rolling hills, including the Cotswold Hills, Chiltern Hills, North and South Downs; where they meet the sea they form white rock exposures such as the cliffs of Dover. This also includes relatively flat plains such as the Salisbury Plain, Somerset Levels, South Coast Plain and The Fens.",""" A History of the World: As Told by Hyper Strong Serbia. In the beginning, the lands of the Balkans, blessed by the mighty Danube, the rugged Dinaric Alps, and the fertile plains of Vojvodina, quietly waited as history swirled beyond their borders. Yet destiny turned, and from these lands emerged Serbia, destined not just to shape its neighborhood, but the entirety of mankind.
 
@@ -41,45 +43,43 @@ elif "albania" in Prompt.lower():
     print(responses[4])
 elif "england" in Prompt.lower() or any(i in Prompt.casefold() for i in ForLowlands):
     print(responses[2])
-elif any(i in Prompt.casefold() for i in ['+', '-', '/','*', '^']): # checks if there is an operation
-    Equation = Prompt.casefold().split() # splits the equation
-    if Equation[1] in ['+', '-', '/', '*', '^']: # checks if the operation is the 2 element in the split list
-        if is_float(Equation[0]): # checks if the first element is a float
-            Nums = [] # defines num
-            Nums.append(float(Equation[1])) # append to list: num
-        
-        count = 1
-        while Equation[count] != "=" or len(Equation) == count + 1:
-            if is_float(Equation[count]):
-                Nums.append(float(Equation[count]))
-            elif Equation[count] in ['+', '-', '/', '*', '^']:
-                Nums.append(Equation[count])
-        
-        for i in Equation:
-            PrevNum = 0
-            Operation = 0
-            Num = 0
-            Result = 0
-            Total = 0
+elif any(i in Prompt.casefold() for i in ['+', '-', '/', '*', '^']):  # checks if there is an operation
 
-            SetTo = "prevnum"
+    def DoEquation(Input):
+        Equation = Input.replace('=', '').split()  # splits the equation and removes '='
+        result = None
+        last_op = None
+        for i in Equation:
             if is_float(i):
-                if SetTo == "prevnum":
-                    PrevNum = float(i)
-                    SetTo = "operation"
-                if SetTo == "num":
-                    Num = float(i)
-                    if Operation == "+":
-                        Result = PrevNum + Num
-                        PrevNum = Result
-                    elif Operation == "-":
-                        Result = PrevNum - Num
-                        PrevNum = Result
-                    SetTo = "operation"
-            else:
-                if SetTo == "operation":
-                    Operation = i
-                    SetTo = "prevnum"
+                num = float(i)
+                if result is None:
+                    result = num
+                else:
+                    # Apply last_op
+                    if last_op == '+':
+                        result += num
+                    elif last_op == '-':
+                        result -= num
+                    elif last_op == '/':
+                        result /= num
+                    elif last_op == '*':
+                        result *= num
+                    elif last_op == '^' or last_op == "**":
+                        result **= num
+            elif i in ['+', '-', '/', '*', '^', "**"]:
+                last_op = i
+        if result is not None:
+            print(result)
+        else:
+            print("Couldn't parse equation.")
+    SplitByBrackets = re.split('[()]', Prompt)
+    print(SplitByBrackets)
+    RemovedSpace = []
+    for i in SplitByBrackets:
+        if i == "":
+            pass
+        else:
+            RemovedSpace.append(i)
                 
         
 elif any(char.isdigit() for char in Prompt):
