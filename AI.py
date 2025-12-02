@@ -45,8 +45,7 @@ elif "england" in Prompt.lower() or any(i in Prompt.casefold() for i in ForLowla
     print(responses[2])
 elif any(i in Prompt.casefold() for i in ['+', '-', '/', '*', '^']):  # checks if there is an operation
 
-    def DoEquation(Input):
-        Equation = Input.replace('=', '').split()  # splits the equation and removes '='
+    def DoEquation(Equation):
         result = None
         last_op = None
         for i in Equation:
@@ -72,17 +71,6 @@ elif any(i in Prompt.casefold() for i in ['+', '-', '/', '*', '^']):  # checks i
             print(result)
         else:
             print("Couldn't parse equation.")
-    SplitByBrackets = re.split('[()]', Prompt)
-    print(SplitByBrackets)
-    RemovedSpace = []
-    for i in SplitByBrackets:
-        if i == "":
-            pass
-        else:
-            RemovedSpace.append(i)
-                
-        
-elif any(char.isdigit() for char in Prompt):
-    print(responses[1])
-else:
-    print(responses[0])
+    Equation = Prompt.replace('=', '')  # splits the equation and removes '='
+    Result = DoEquation(Equation)
+    print(Result)
